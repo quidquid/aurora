@@ -1,0 +1,94 @@
+datasource db {
+  //url      = "postgresql://postgres:deceit.guppy1THUMP@leaf.lan:5432/aurora"
+  url      = "mongodb://admin:deceit.guppy1THUMP@leaf.lan:27017/aurora?authSource=admin"
+  //provider = "postgresql"
+  provider = "mongodb"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Node {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime    @default(now())
+  lastSeen  DateTime    @default(now())
+  mac       String      @unique
+  ip        String
+  name      String
+  info      Json?
+  state     Json?
+  lights    Light[]
+  skipFirst Boolean  @default(false)
+  connections Connection[]
+}
+
+type Connection {
+  gpio      Int
+  lightId   String
+}
+
+model Light {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        LightType
+  node        Node?       @relation(fields: [nodeId], references: [id])
+  nodeId      String?
+  colorOrder  ColorOrder  @default(GRB)
+  numPixels   Int
+  pixels      Point[]
+  placements  Placement[]
+}
+
+enum LightType {
+  SINGLE    // One pixel / bulb
+  LANTERN   // Glowlandy
+  FLOOD     // RGB floodlights
+  STRING    // String lights
+}
+
+enum ColorOrder {
+  GRB       // 0 - these values are from wled settings
+  RGB
+  BRG
+  RBG 
+  BGR 
+  GBR 
+}
+
+model Site {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime  @default(now())
+  name        String
+  imageURL    String
+  imageOrigin Point
+  layout      Placement[]
+  scenes      Scene[]
+}
+
+type Point {
+  x         Float
+  y         Float
+  z         Float @default(0)
+}
+
+type Extent {
+  sw        Point
+  ne        Point
+}
+
+model Placement {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  site      Site     @relation(fields: [siteId], references: [id])
+  siteId    String
+  light     Light    @relation(fields: [lightId], references: [id])
+  lightId   String
+  point     Point
+}
+
+model Scene {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  site      Site     @relation(fields: [siteId], references: [id])
+  siteId    String
+} 
+

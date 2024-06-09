@@ -1,7 +1,18 @@
-import { Title, Text, Anchor } from '@mantine/core';
+import { Title, Text, Anchor, Button } from '@mantine/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import classes from './Welcome.module.css';
 
+
 export function Welcome() {
+  async function scan() {
+    const res = await fetch('/wled/discover')
+    if(!res.ok) {
+      throw new Error('failed')
+    }
+    console.log(res.json())
+  }
+  
   return (
     <>
       <Title className={classes.title} ta="center" mt={100}>
@@ -11,13 +22,10 @@ export function Welcome() {
         </Text>
       </Title>
       <Text c="dimmed" ta="center" size="lg" maw={580} mx="auto" mt="xl">
-        This starter Next.js project includes a minimal setup for server side rendering, if you want
-        to learn more on Mantine + Next.js integration follow{' '}
-        <Anchor href="https://mantine.dev/guides/next/" size="lg">
-          this guide
-        </Anchor>
-        . To get started edit page.tsx file.
+        This starter Next.js project includes a minimal setup for server side rendering.
       </Text>
+
+      <Button variant="filled" onClick={(e) => scan()}>Scan</Button>
     </>
   );
 }
