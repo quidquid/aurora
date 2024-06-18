@@ -1,15 +1,55 @@
+'use client';
+
 import '@mantine/core/styles.css';
 import React from 'react';
+import { usePathname } from 'next/navigation'
 import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import StoreProvider from './StoreProvider';
 import { theme } from '../theme';
+import { useState } from 'react';
+import {
+  AppShell, Burger, NavLink,
+  Badge,
+  Button, Link, Text,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHome, faLightbulb, faRadio } from '@fortawesome/free-solid-svg-icons'
 
-export const metadata = {
+
+/*export const metadata = {
   title: 'Aurora',
   description: 'A lighting design playground',
-};
+};*/
 
 export default function RootLayout({ children }: { children: any }) {
+  const [opened, { toggle }] = useDisclosure();
+  const [active, setActive] = useState(0);
+  const pathname = usePathname()
+
+  const navItems = [
+    { icon: faHome,
+      label: 'Dashboard',
+      path: '/',
+    },
+    { icon: faRadio,
+      label: 'Nodes',
+      path: '/nodes',
+    },
+    { icon: faLightbulb,
+      label: 'Lamps',
+      path: '/lamps',
+    },
+  ];
+  const navLinks = navItems.map((item, index) => <NavLink
+    href={item.path}
+    label={item.label}
+    leftSection={<FontAwesomeIcon icon={item.icon} />}
+    active={pathname === item.path}
+    onClick={() => setActive(index)}
+    key={`navlink-${index}`}
+  />);
+
   return (
     <html lang="en">
       <head>
@@ -23,7 +63,36 @@ export default function RootLayout({ children }: { children: any }) {
       <body>
         <StoreProvider>
           <MantineProvider theme={theme}>
-            {children}
+            <AppShell
+              header={{ height: 50 }}
+              navbar={{
+                width: 200,
+                breakpoint: 'sm',
+                collapsed: { mobile: !opened },
+              }}
+              padding="md"
+            >
+              <AppShell.Header p="md">
+                <Burger
+                  opened={opened}
+                  onClick={toggle}
+                  hiddenFrom="sm"
+                  size="sm"
+                />
+                <Text>
+                  Aurora
+                </Text>
+              </AppShell.Header>
+
+              <AppShell.Navbar p="md">
+                {navLinks}
+              </AppShell.Navbar>
+
+              <AppShell.Main>
+                {children}
+              </AppShell.Main>
+            </AppShell>
+
           </MantineProvider>
         </StoreProvider>
       </body>

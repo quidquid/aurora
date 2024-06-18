@@ -33,21 +33,11 @@ function discover(ms: number): Object[] {
 export async function GET() {
   const list = await discover(5000);
 
-  const wledNodes = await Promise.all(list.map((info) => {
-    // Persist / upsert to Node records
-    return wledApi.fetchJson(info.ip)
-  }))
+  const wledNodes = await Promise.all(list.map((info) => wledApi.fetchJson(info.ip)))
   console.log(wledNodes)
 
   wledNodes.map(async (json) => {
-    let attrs = {
-      mac:    json.info.mac,
-      ip:     json.info.ip,
-      name:   json.info.name,
-      info:   json.info,
-      state:  json.state,
-      lastSeen: new Date(),
-    }
+    const attrs = wledApi.jsonToAttrs(json)
     await prisma.node.upsert({
       where: {
         mac: attrs.mac
@@ -63,6 +53,5 @@ export async function GET() {
     where: { mac: { in: macs } }
   })
 
-  const data = { wledNodes, nodes };
-  return Response.json(data);
+  return Response.json({ wledNodes, nodes });
 }

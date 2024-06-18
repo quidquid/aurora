@@ -8,8 +8,36 @@ async function fetchJson(ip: string) {
     return json
 }
 
+async function postLEDSettings(ip: string, data: Record <string,string>) {
+  const query = new URLSearchParams(data)
+  const res = await fetch(`http://${ip}/settings/led`, {
+    method: 'POST',
+    cache: 'no-cache',
+    body: query.toString(),
+  })
+  if (!res.ok) {
+    throw new Error('failed')
+  }
+  return true
+}
+
+function jsonToAttrs(json) {
+  return {
+    mac:    json.info.mac,
+    ip:     json.info.ip,
+    name:   json.info.name,
+    info:   json.info,
+    state:  json.state,
+    lastSeen: new Date(),
+  }
+}
+
 const wledApi = {
-  fetchJson
+  fetchJson,
+  postLEDSettings,
+  //postUISettings,
+  //postWifiSettings,
+  jsonToAttrs,
 }
 
 export default wledApi
