@@ -1,24 +1,33 @@
 'use client';
 
-import { Avatar, Badge, Button, Card, Code, Group, Switch, Text, Title, ScrollArea } from '@mantine/core';
-//import { useGetNodeByIdQuery } from '@/lib/features/auroraApi'
+import { Badge, Button, Card, Collapse, Group, Text, Title, UnstyledButton } from '@mantine/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-//import { faLightbulb } from '@fortawesome/free-solid-svg-icons'
+import { faPencil } from '@fortawesome/free-solid-svg-icons'
+import { LampForm } from '@/components/Lamps/LampForm'
+import { useDisclosure } from '@mantine/hooks';
 
 export function LampCard(lamp: object) {
+  const [opened, { toggle }] = useDisclosure(false);
+
   return (
     <Card mb='md'>
       <Group justify='space-between' mt='xs' mb='xs'>
         <Title order={3}>{lamp.name}</Title>
+        <Group>
+          <Badge color='cyan'>
+            {lamp.numPixels} {lamp.numPixels === 1 ? 'pixel' : 'pixels'}
+          </Badge>
+          <Badge color='gray'>
+            {lamp.colorOrder}
+          </Badge>
+          <UnstyledButton onClick={toggle}>
+            <FontAwesomeIcon icon={faPencil} color='cyan' />
+          </UnstyledButton>
+        </Group>
       </Group>
-      <Group justify='space-between' mt='xs' mb='xs'>
-        <Text size='lg' c='dimmed'>
-          {lamp.numPixels} {lamp.numPixels === 1 ? 'pixel' : 'pixels'}
-        </Text>
-        <Text size='lg' c='dimmed'>
-          {lamp.colorOrder}
-        </Text>
-      </Group>
+      <Collapse in={opened}>
+        <LampForm light={lamp}/>
+      </Collapse>
     </Card>
   )
 }

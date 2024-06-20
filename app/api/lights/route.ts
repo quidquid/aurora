@@ -13,6 +13,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const params = await request.json()
   console.log(params)
+  delete params['id']
 
   const light = await prisma.light.create({
     data: params

@@ -4,7 +4,9 @@ import { PrismaClient, LightType } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {{
+export const dynamic = 'force-dynamic' // defaults to auto
+
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   const light = await prisma.light.findFirst({
     where: { id: params.id }
   })
