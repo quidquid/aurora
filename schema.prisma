@@ -61,7 +61,7 @@ model Site {
   createdAt   DateTime  @default(now())
   name        String
   imageURL    String
-  imageOrigin Point
+  imageExtent Extent
   layout      Placement[]
   scenes      Scene[]
 }

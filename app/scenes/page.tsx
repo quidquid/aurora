@@ -1,19 +1,17 @@
 'use client';
 
-// /lamps page
+// /scenes page
 
 import { useState } from 'react';
-import { Button, Collapse, Group, TextInput, Title, Checkbox, UnstyledButton } from '@mantine/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { Button, Collapse, Group, TextInput, Checkbox } from '@mantine/core';
 import { LampCard } from '@/components/Lamps/LampCard'
 import { useGetLightsQuery, useCreateLightMutation } from '@/lib/features/auroraApi'
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 
-export default function LampsPage() {
+export default function ScenesPage() {
   const [opened, { toggle }] = useDisclosure(false);
-  const { data, error, isLoading } = useGetLightsQuery()
+  //const { data, error, isLoading } = useGetLightsQuery()
 
   const [
     createLight, // This is the mutation trigger
@@ -21,7 +19,7 @@ export default function LampsPage() {
   ] = useCreateLightMutation()
 
 
-  const form = useForm({
+  /*const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
       name: '',
@@ -41,16 +39,14 @@ export default function LampsPage() {
   const onSubmit = (values) => {
     console.log(values)
     createLight(values)
-  }
+  }*/
 
   return <>
-    <Group justify="space-between" mb='md'>
-      <Title order={2}>Lights</Title>
-      <UnstyledButton onClick={toggle}>
-        <FontAwesomeIcon size='2xl' icon={faPlusCircle} color='cyan' />
-      </UnstyledButton>
+    <div>Scenes page</div>
+    {/*<Group justify="center" mb='md'>
+      <Button onClick={toggle}>Add a Light</Button>
     </Group>
-    <Collapse in={opened} mb='lg'>
+    <Collapse in={opened}>
       <form onSubmit={form.onSubmit(onSubmit)}>
         <TextInput
           withAsterisk
@@ -65,6 +61,6 @@ export default function LampsPage() {
       </form>
     </Collapse>
 
-    {data.lights.map((lamp) => <LampCard key={lamp.id} {...lamp}/>)}
+    {data.lights.map((lamp) => <LampCard key={lamp.id} {...lamp}/>)} */}
   </>
 }

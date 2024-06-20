@@ -15,6 +15,7 @@ export const auroraApi = createApi({
     getNodeById: builder.query({
       query: (id) => `nodes/${id}`,
     }),
+
     getLights: builder.query({
       query: () => 'lights',
     }),
@@ -22,6 +23,31 @@ export const auroraApi = createApi({
       query: (attrs) => ({
         url: 'lights',
         method: 'POST',
+        body: attrs,
+      }),
+    }),
+    updateLight: builder.mutation({
+      query: ({ id, ...attrs }) => ({
+        url: `lights/${id}`,
+        method: 'PUT',
+        body: attrs,
+      }),
+    }),
+
+    getSites: builder.query({
+      query: () => 'sites',
+    }),
+    createSite: builder.mutation({
+      query: (attrs) => ({
+        url: 'sites',
+        method: 'POST',
+        body: attrs,
+      }),
+    }),
+    updateSite: builder.mutation({
+      query: ({ id, ...attrs }) => ({
+        url: `sites/${id}`,
+        method: 'PUT',
         body: attrs,
       }),
     }),
@@ -34,6 +60,12 @@ export const {
   useDiscoverQuery,
   useGetNodesQuery,
   useGetNodeByIdQuery,
+
   useGetLightsQuery,
   useCreateLightMutation,
+  useUpdateLightMutation,
+
+  useGetSitesQuery,
+  useCreateSiteMutation,
+  useUpdateSiteMutation,
 } = auroraApi

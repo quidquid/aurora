@@ -14,7 +14,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faLightbulb, faRadio } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faLightbulb, faRadio, faMapMarkerAlt, faPalette } from '@fortawesome/free-solid-svg-icons'
 
 
 /*export const metadata = {
@@ -39,6 +39,14 @@ export default function RootLayout({ children }: { children: any }) {
     { icon: faLightbulb,
       label: 'Lamps',
       path: '/lamps',
+    },
+    { icon: faPalette,
+      label: 'Scenes',
+      path: '/scenes',
+    },
+    { icon: faMapMarkerAlt,
+      label: 'Sites',
+      path: '/sites',
     },
   ];
   const navLinks = navItems.map((item, index) => <NavLink

@@ -1,3 +1,5 @@
+// /api/lights/[id]
+
 import { PrismaClient, LightType } from '@prisma/client'
 
 const prisma = new PrismaClient()

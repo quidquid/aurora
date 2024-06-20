@@ -1,32 +1,32 @@
 'use client';
 
-// /lamps page
+// /sites page
 
 import { useState } from 'react';
-import { Button, Collapse, Group, TextInput, Title, Checkbox, UnstyledButton } from '@mantine/core';
+import { Button, Collapse, Group, TextInput, Title, UnstyledButton } from '@mantine/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
-import { LampCard } from '@/components/Lamps/LampCard'
-import { useGetLightsQuery, useCreateLightMutation } from '@/lib/features/auroraApi'
+import { SiteCard } from '@/components/Sites/SiteCard'
+import { useGetSitesQuery, useCreateSiteMutation } from '@/lib/features/auroraApi'
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 
-export default function LampsPage() {
+export default function SitesPage() {
   const [opened, { toggle }] = useDisclosure(false);
-  const { data, error, isLoading } = useGetLightsQuery()
+  const { data, error, isLoading } = useGetSitesQuery()
 
   const [
-    createLight, // This is the mutation trigger
+    createSite, // This is the mutation trigger
     { isLoading: isCreating }, // This is the destructured mutation result
-  ] = useCreateLightMutation()
+  ] = useCreateSiteMutation()
 
 
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
       name: '',
-      type: 'LANTERN',
-      numPixels: 1,
+      imageURL: '',
+      //numPixels: 1,
     },
   });
 
@@ -40,23 +40,29 @@ export default function LampsPage() {
 
   const onSubmit = (values) => {
     console.log(values)
-    createLight(values)
+    createSite(values)
   }
 
   return <>
     <Group justify="space-between" mb='md'>
-      <Title order={2}>Lights</Title>
+      <Title order={2}>Sites</Title>
       <UnstyledButton onClick={toggle}>
         <FontAwesomeIcon size='2xl' icon={faPlusCircle} color='cyan' />
       </UnstyledButton>
     </Group>
-    <Collapse in={opened} mb='lg'>
+    <Collapse in={opened}>
       <form onSubmit={form.onSubmit(onSubmit)}>
-        <TextInput
+      <TextInput
           withAsterisk
           label="Name"
           key={form.key('name')}
           {...form.getInputProps('name')}
+        />
+        <TextInput
+          withAsterisk
+          label="Image URL"
+          key={form.key('imageURL')}
+          {...form.getInputProps('imageURL')}
         />
 
         <Group justify="flex-end" mt="md">
@@ -65,6 +71,6 @@ export default function LampsPage() {
       </form>
     </Collapse>
 
-    {data.lights.map((lamp) => <LampCard key={lamp.id} {...lamp}/>)}
+    {data.sites.map((site) => <SiteCard key={site.id} {...site}/>)}
   </>
 }
