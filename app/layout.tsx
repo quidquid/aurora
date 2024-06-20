@@ -62,6 +62,7 @@ export default function RootLayout({ children }: { children: any }) {
     <html lang="en">
       <head>
         <ColorSchemeScript />
+        <title>Aurora</title>
         <link rel="shortcut icon" href="/favicon.svg" />
         <meta
           name="viewport"

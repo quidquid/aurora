@@ -19,8 +19,6 @@ export function NodeCard(node: object) {
   const lastSeen = new Date(node.lastSeen)
   const lastSeenAgo = (new Date() - lastSeen) / 1000
   const online = (lastSeenAgo < 15*60)
-  console.log(lastSeenAgo)
-  console.log(online)
   
   return (
     <Card mb='md'>

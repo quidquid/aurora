@@ -17,7 +17,7 @@ function discover(ms: number): Object[] {
         port: service.port,
         mac: service.txt?.mac,
       }
-      console.log(info)
+      //console.log(info)
       list.push(info)
     });
 
@@ -31,10 +31,10 @@ function discover(ms: number): Object[] {
 
 
 export async function GET() {
-  const list = await discover(5000);
+  const list = await discover(4000);
 
   const wledNodes = await Promise.all(list.map((info) => wledApi.fetchJson(info.ip)))
-  console.log(wledNodes)
+  //console.log(wledNodes)
 
   wledNodes.map(async (json) => {
     const attrs = wledApi.jsonToAttrs(json)
@@ -48,10 +48,11 @@ export async function GET() {
     return attrs
   })
 
-  const macs = list.map(info => info.mac)
+  /*const macs = list.map(info => info.mac)
   const nodes = await prisma.node.findMany({
     where: { mac: { in: macs } }
-  })
+  })*/
+  const nodes = await prisma.node.findMany()
 
   return Response.json({ wledNodes, nodes });
 }

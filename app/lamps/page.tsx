@@ -3,7 +3,7 @@
 // /lamps page
 
 import { useState } from 'react';
-import { Button, Collapse, Group, Title, Checkbox, UnstyledButton } from '@mantine/core';
+import { Button, Collapse, Group, Loader, Notification, Title, Checkbox, UnstyledButton } from '@mantine/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { LampCard } from '@/components/Lamps/LampCard'
@@ -15,12 +15,24 @@ export default function LampsPage() {
   const [opened, { toggle }] = useDisclosure(false);
   const { data, error, isLoading } = useGetLightsQuery()
 
-  if(error) {
-    return <>Oh no, there was an error</>
-  }
+  let body = null
+  if (error) {
+    body = <Group justify='space-around' mt={100}>
+      <Notification title='Error'>Oh no, there was an error</Notification>
+    </Group>
 
-  if(isLoading) {
-    return <>Loading...</>
+  } else if (isLoading) {
+    body = <Group justify='space-around' mt={100}>
+      <Loader></Loader>
+    </Group>
+
+  } else {
+    body = <>
+      <Collapse in={opened} mb='lg'>
+        <LampForm/>
+      </Collapse>
+      {data.lights.map((lamp) => <LampCard key={lamp.id} {...lamp}/>)}
+    </>
   }
 
   return <>
@@ -30,10 +42,7 @@ export default function LampsPage() {
         <FontAwesomeIcon size='2xl' icon={faPlusCircle} color='cyan' />
       </UnstyledButton>
     </Group>
-    <Collapse in={opened} mb='lg'>
-      <LampForm/>
-    </Collapse>
 
-    {data.lights.map((lamp) => <LampCard key={lamp.id} {...lamp}/>)}
+    {body}
   </>
 }
