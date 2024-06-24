@@ -6,6 +6,13 @@ import type {
 } from "@remix-run/node";
 import { useLoaderData } from '@remix-run/react';
 
+import { Button, Collapse, Group, Loader, Notification, Title, Checkbox, UnstyledButton } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { LampCard } from '~/components/Lamps/LampCard'
+import { LampForm } from '~/components/Lamps/LampForm'
+
 
 export const loader = async () => {
   const lights = await prisma.light.findMany()
@@ -28,13 +35,6 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 }
 
 
-
-import { Button, Collapse, Group, Loader, Notification, Title, Checkbox, UnstyledButton } from '@mantine/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
-import { LampCard } from '~/components/Lamps/LampCard'
-import { LampForm } from '~/components/Lamps/LampForm'
-import { useDisclosure } from '@mantine/hooks';
 
 export default function LampsPage() {
   const [opened, { toggle }] = useDisclosure(false);

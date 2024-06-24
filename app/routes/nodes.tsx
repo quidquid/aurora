@@ -1,6 +1,12 @@
 import prisma from '@/lib/db';
 import { json } from "@remix-run/node"; // or cloudflare/deno
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useRevalidator } from '@remix-run/react';
+import { useEffect } from 'react';
+import { useInterval } from '@/lib/hooks';
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Group, Title, Loader, Notification } from '@mantine/core';
+import { NodeCard } from '~/components/Nodes/NodeCard'
+
 
 export const loader = async () => {
   const nodes = await prisma.node.findMany()
@@ -8,16 +14,18 @@ export const loader = async () => {
 };
 
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Group, Title, Loader, Notification } from '@mantine/core';
-import { NodeCard } from '~/components/Nodes/NodeCard'
-//import { useDiscoverQuery } from '@/lib/features/auroraApi'
-
-
 export default function NodesPage() {
   // const { data, error, isLoading } = useDiscoverQuery()
   // const { data, error, isLoading } = useGetNodesQuery()
   const { nodes } = useLoaderData<typeof loader>()
+  const revalidator = useRevalidator();
+
+  useInterval(() => {
+    if (revalidator.state === "idle") {
+      revalidator.revalidate();
+    }
+  }, 30000);
+
 
   /*const { data, status, isLoading, error, refetch } = useDiscoverQuery(null, {
     pollingInterval: 30 * 1000,

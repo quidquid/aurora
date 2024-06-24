@@ -1,6 +1,17 @@
 import prisma from '@/lib/db';
 import { json } from "@remix-run/node"; // or cloudflare/deno
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
 import { useLoaderData, Form, useSubmit } from '@remix-run/react';
+
+import { Button, Collapse, Group, TextInput, Title, UnstyledButton } from '@mantine/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { SiteCard } from '~/components/Sites/SiteCard'
+import { useDisclosure } from '@mantine/hooks';
+import { useForm } from '@mantine/form';
 
 export const loader = async () => {
   const sites = await prisma.site.findMany()
@@ -25,12 +36,6 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 
 
-import { Button, Collapse, Group, TextInput, Title, UnstyledButton } from '@mantine/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
-import { SiteCard } from '~/components/Sites/SiteCard'
-import { useDisclosure } from '@mantine/hooks';
-import { useForm } from '@mantine/form';
 
 export default function SitesPage() {
   const [opened, { toggle }] = useDisclosure(false);

@@ -1,4 +1,4 @@
-import prisma from '@prisma/client';
+import prisma from '@/lib/db';
 import { json } from "@remix-run/node"; // or cloudflare/deno
 import type {
   ActionFunctionArgs,
@@ -27,6 +27,9 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
 
+  delete updates.id;
+  updates.numPixels = parseInt(updates.numPixels);
+  
   await prisma.light.update({
     where: { id: params.id },
     data: updates

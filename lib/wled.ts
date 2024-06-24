@@ -8,6 +8,10 @@ async function fetchJson(ip: string) {
     return json
 }
 
+// TODO general version
+async function postSettings(ip: string, data: Record <string,object>) {
+}
+
 async function postLEDSettings(ip: string, data: Record <string,string>) {
   const query = new URLSearchParams(data)
   const res = await fetch(`http://${ip}/settings/led`, {
@@ -34,6 +38,7 @@ function jsonToAttrs(json) {
 
 const wledApi = {
   fetchJson,
+  postSettings,
   postLEDSettings,
   //postUISettings,
   //postWifiSettings,

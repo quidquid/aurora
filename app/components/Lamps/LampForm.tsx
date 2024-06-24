@@ -1,9 +1,9 @@
 import { useLoaderData, Form, useSubmit } from '@remix-run/react';
 
-import { Button, Fieldset, Group, Select, TextInput } from '@mantine/core';
+import { Button, Fieldset, Group, Select, TextInput, NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
-export function LampForm({ light }) {
+export function LampForm({ light, onSubmitted }) {
   const submit = useSubmit();
   const form = useForm({
     mode: 'uncontrolled',
@@ -23,6 +23,9 @@ export function LampForm({ light }) {
       action: light ? `/lights/${light.id}` : '/lights',
       method: 'post'
     })
+    if(onSubmitted) {
+      onSubmitted(values)
+    }
   }
 
   return (
@@ -40,7 +43,19 @@ export function LampForm({ light }) {
           key={form.key('type')}
           {...form.getInputProps('type')}
         />
-
+        <NumberInput
+          label='Num Pixels'
+          min={1} max={1000}
+          allowDecimal={false}
+          key={form.key('numPixels')}
+          {...form.getInputProps('numPixels')}
+        />
+        <Select
+          label='Color Order'
+          data={['GRB', 'RGB', 'BRG', 'RBG', 'BGR', 'GBR']}
+          key={form.key('colorOrder')}
+          {...form.getInputProps('colorOrder')}
+        />
         <Group mt="md">
           <Button type="submit">Submit</Button>
         </Group>
