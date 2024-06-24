@@ -16,7 +16,9 @@ export const loader = async () => {
 export const action = async ({ params, request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const attrs = Object.fromEntries(formData);
+  console.log(attrs);
   delete attrs['id']
+  attrs.numPixels = parseInt(attrs.numPixels);
 
   const light = await prisma.light.create({
     data: attrs

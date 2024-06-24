@@ -2,7 +2,6 @@ import { useLoaderData, Form, useSubmit } from '@remix-run/react';
 
 import { Button, Fieldset, Group, Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useUpdateLightMutation, useCreateLightMutation } from '@/lib/features/auroraApi'
 
 export function LampForm({ light }) {
   const submit = useSubmit();
@@ -18,18 +17,16 @@ export function LampForm({ light }) {
   })
 
 
-  /*const onSubmit = (values) => {
+  const onSubmit = (values, e) => {
     console.log(values)
-    if (light) {
-      updateLight(values)
-    } else {
-      createLight(values)
-    }
-  }*/
-
+    submit(values, {
+      action: light ? `/lights/${light.id}` : '/lights',
+      method: 'post'
+    })
+  }
 
   return (
-    <Form method='post' onSubmit={form.onSubmit((_v, e) => submit(e.currentTarget))}>
+    <Form method='post' onSubmit={form.onSubmit(onSubmit)}>
       <Fieldset legend={`${light ? 'Update' : 'Create'} light`}>
         <TextInput
           withAsterisk
